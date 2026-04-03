@@ -27,11 +27,13 @@ export async function fetchFinanceNews() {
 
     return data.articles
       .filter(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (article: any) =>
           article.title &&
           article.title !== "[Removed]" &&
           article.description
       )
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .map((article: any, index: number) => ({
         article_id: index + 1,
         date: article.publishedAt?.slice(0, 10),
