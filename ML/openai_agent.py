@@ -43,7 +43,7 @@ def extraction_agent(news_text: str) -> dict:
     Guidelines:
     1. Direct Mention (Weight 1.0): The company is named.
     2. Sector/Industry Mention (Weight 0.7-0.9): If a sector is mentioned (e.g., 'EVs', 'Banks', 'FMCG'), pull 3-5 top stocks from that sector.
-    3. Competitors/Supply Chain (Weight 0.5-0.7): If a company is mentioned, also include its direct competitors or suppliers from the list.
+    3. Return the news only if its from a credible source
     
     Format EXACTLY like this: TICKER|WEIGHT, TICKER|WEIGHT
     Example: ZOMATO|1.0, SWIGGY|0.9, PAYTM|0.6
@@ -103,7 +103,7 @@ def isolate_context(ticker: str, news_text: str) -> str:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
-            temperature=0.0  
+            temperature=0.0 
         )
         return response.choices[0].message.content.strip()
     except:
