@@ -29,6 +29,7 @@ interface MLResult {
 export default function DemoAnalyzer() {
   const [headline, setHeadline]     = useState("");
   const [description, setDescription] = useState("");
+  const [source, setSource]         = useState("");
   const [loading, setLoading]       = useState(false);
   const [result, setResult]         = useState<MLResult | null>(null);
   const [error, setError]           = useState("");
@@ -91,6 +92,18 @@ export default function DemoAnalyzer() {
             rows={3}
           />
         </div>
+         
+         <div className="demo-input-group">
+  <label className="demo-input-label">Source*</label>
+  <input
+    className="demo-textarea"
+    placeholder="e.g. Economic Times, Reuters, Mint..."
+    value={source}
+    onChange={(e) => setSource(e.target.value)}
+    style={{ height: "42px", resize: "none" }}
+  />
+</div>
+        
 
         <div className="demo-input-group">
           <label className="demo-input-label">Description (optional)</label>
