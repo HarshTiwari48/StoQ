@@ -7,7 +7,16 @@ import { Button } from "@/components/ui/button";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 
-export default function Navbar() {
+
+type NavbarProps = {
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+};
+
+export default function Navbar({
+  searchQuery,
+  onSearchChange,
+}: NavbarProps) {
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -42,9 +51,13 @@ export default function Navbar() {
       <div className="hidden lg:flex items-center relative w-[340px]">
         <Search size={18} className="absolute left-3 text-slate-400" />
         <Input
-          placeholder="Search stocks, sectors, news..."
-          className="pl-10 rounded-lg bg-slate-50 border-slate-200"
-        />
+  value={searchQuery}
+  onChange={(e) =>
+    onSearchChange(e.target.value)
+  }
+  placeholder="Search stocks, sectors, news..."
+  className="pl-10 rounded-lg bg-slate-50 border-slate-200"
+/>
       </div>
 
       {/* Right - User */}

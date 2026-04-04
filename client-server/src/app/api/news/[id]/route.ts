@@ -3,22 +3,19 @@ import connectDB from "@/lib/mongodb";
 import News from "@/models/News";
 import mongoose from "mongoose";
 
-type RouteContext = {
-  params: {
-    id: string;
-  };
-};
-
 export async function GET(
   req: NextRequest,
-  { params }: RouteContext
+  context: {
+    params: Promise<{
+      id: string;
+    }>;
+  }
 ) {
   try {
     await connectDB();
 
-    const { id } = params;
+    const { id } = await context.params;
 
-    // Validate MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         {
@@ -46,12 +43,16 @@ export async function GET(
       article,
     });
   } catch (error) {
-    console.error("Single News Fetch Error:", error);
+    console.error(
+      "Single News Fetch Error:",
+      error
+    );
 
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to fetch article",
+        message:
+          "Failed to fetch article",
       },
       { status: 500 }
     );

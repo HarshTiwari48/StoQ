@@ -28,6 +28,7 @@ export default function DashboardPage() {
   const [page, setPage] = useState(1);
   const [selectedArticle, setSelectedArticle] =
   useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
 const [isOverlayOpen, setIsOverlayOpen] =
   useState(false);
@@ -54,18 +55,24 @@ const [isOverlayOpen, setIsOverlayOpen] =
         );
 
         // Fetch news based on selected category
-        const newsUrl =
-  selectedCategory === "ALL"
-    ? "/api/news?page=1&limit=50"
-    : `/api/news?page=${page}&limit=10&domain=${encodeURIComponent(
-        selectedCategory
-      )}`;
+        const newsUrl = searchQuery.trim()
+  ? `/api/news/search?q=${encodeURIComponent(
+      searchQuery
+    )}`
+  : selectedCategory === "ALL"
+  ? `/api/news?page=${page}&limit=10`
+  : `/api/news?page=${page}&limit=10&domain=${encodeURIComponent(
+      selectedCategory
+    )}`;
 
         const newsRes = await fetch(newsUrl);
         const newsData = await newsRes.json();
 
         setNews((prev) => {
-  const incoming = newsData.news || [];
+  const incoming =
+  newsData.news ||
+  newsData.results ||
+  [];
 
   if (page === 1) {
     return incoming;
@@ -92,13 +99,16 @@ const [isOverlayOpen, setIsOverlayOpen] =
     };
 
     fetchDashboardData();
-  }, [selectedCategory, page]);
+  }, [selectedCategory, page, searchQuery]);
 
   return (
     <main className="min-h-screen bg-linear-to-br from-blue-50 via-white to-blue-100 p-6">
       {/* Navbar */}
       <div className="mb-6">
-  <Navbar />
+  <Navbar
+  searchQuery={searchQuery}
+  onSearchChange={setSearchQuery}
+/>
 </div>
 
       <div className="grid grid-cols-12 gap-6 h-[calc(100vh-140px)]">

@@ -22,12 +22,14 @@ export async function GET(req: NextRequest) {
     const searchRegex = new RegExp(query, "i");
 
     const results = await News.find({
-      $or: [
-        { headline: searchRegex },
-        { domain: searchRegex },
-        { stocks: searchRegex },
-      ],
-    }).sort({ publishedAt: -1, createdAt: -1 });
+  $or: [
+    { title: searchRegex },
+    { domain: searchRegex },
+    { stocks: searchRegex },
+    { source: searchRegex },
+    { description: searchRegex },
+  ],
+}).sort({ publishedAt: -1, createdAt: -1 });
 
     return NextResponse.json({
       success: true,
