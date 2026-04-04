@@ -10,10 +10,7 @@ export async function fetchFinanceNews() {
       .toISOString()
       .split("T")[0];
 
-    const query = `
-      "Nifty" OR "Sensex" OR "NSE" OR "BSE" OR "Reliance" OR "Tata" 
-      OR "Infosys" OR "HDFC" OR "ICICI" OR "ITC" OR "Maruti" OR "banking" OR "stocks" OR "Crude oil" OR "Pharma" OR "Profit" OR "Market"
-    `;
+    const query = `("NSE" OR "BSE" OR "Nifty" OR "Sensex" OR "Dalal Street" OR "Indian equities" OR "Indian stock market" OR "PROFIT" OR "LOSS" OR "BUY" OR "SELL") AND ("Banking" OR "IT Services" OR "Pharma" OR "Automobile" OR "FMCG" OR "Telecom" OR "Energy" OR "Real Estate" OR "Metals" OR "Defense" OR "Logistics" OR "Consumer Durables" OR "Chemicals" OR "OIL" OR "MARKET" OR "EBITDA" OR "SHARES" )`;
 
     const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
       query

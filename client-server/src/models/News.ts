@@ -53,6 +53,11 @@ const NewsSchema = new Schema(
       required: false,
       default: null,
     },
+    reasoning: {
+      type: String,
+      required: false,
+      trim: true,
+    },
 
     source: {
       type: String,
