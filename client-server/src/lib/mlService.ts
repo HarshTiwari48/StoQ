@@ -2,6 +2,7 @@ import axios from "axios";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL!;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function sendNewsToML(newsData: any[]) {
   try {
     const mlPayload = newsData.map((item) => ({
@@ -19,6 +20,7 @@ export async function sendNewsToML(newsData: any[]) {
     );
 
     return response.data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error(
       "ML API ERROR:",

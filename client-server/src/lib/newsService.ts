@@ -14,7 +14,7 @@ export async function fetchFinanceNews() {
 
     const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
       query
-    )}&from=${fromDate}&to=${toDate}&sortBy=publishedAt&language=en&pageSize=17&apiKey=${process.env.NEWS_API_KEY}`;
+    )}&from=${fromDate}&to=${toDate}&sortBy=publishedAt&language=en&pageSize=10&apiKey=${process.env.NEWS_API_KEY}`;
 
     const response = await fetch(url);
 

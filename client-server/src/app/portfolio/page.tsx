@@ -7,6 +7,7 @@ import WatchlistPanel from "@/components/portfolio/WatchlistPanel";
 import RelevantNewsPanel from "@/components/portfolio/RelevantNewsPanel";
 import SuggestedStocksPanel from "@/components/portfolio/SuggestedStocksPanel";
 import Image from "next/image";
+import Link from "next/link";
 
 
 export default function PortfolioPage() {
@@ -32,6 +33,9 @@ export default function PortfolioPage() {
     <main className="portfolio-page">
       <div className="portfolio-header">
         <div className="portfolio-header-left">
+          <Link href="/dashboard" className="back-btn">
+                  ← Dashboard
+                  </Link>
           <span className="portfolio-label">MY PORTFOLIO</span>
           <h1 className="portfolio-title">
             Welcome, {session.user?.name?.split(" ")[0]}

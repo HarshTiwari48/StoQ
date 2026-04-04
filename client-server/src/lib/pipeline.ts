@@ -54,6 +54,8 @@ export async function runNewsPipeline() {
 
     rsi: firstStock?.data?.rsi ?? null,
     macd: firstStock?.data?.macd ?? null,
+    reasoning: firstStock?.reasoning ?? null,
+    
 
     // Keep full ML response for detailed modal
     impacted_domains: impactedDomains,

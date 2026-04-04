@@ -396,3 +396,13 @@
 .user-email           { font-size: 0.75rem; color: #9ca3af; }
 .source-link { color: #6366f1; text-decoration: underline; }
 .source-link:hover { color: #4f46e5; }
+.back-btn {
+  font-size: 0.8rem;
+  color: #6366f1;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+.back-btn:hover { text-decoration: underline; }
