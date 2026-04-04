@@ -15,9 +15,22 @@ export default function Navbar() {
     <nav className="w-full rounded-xl bg-white/80 backdrop-blur-xl shadow-md border border-slate-200 px-6 py-4 flex items-center justify-between">
       {/* Left - Brand */}
       <div className="flex items-center gap-6">
-        <Link href="/dashboard" className="text-2xl font-bold tracking-tight text-slate-800">
-          StoQ
-        </Link>
+        <Link href="/dashboard" className="flex items-center gap-2">
+  <Image
+    src="/logoonly-removebg-preview.png"
+    alt="StoQ Icon"
+    width={32}
+    height={32}
+    className="w-8 h-8 object-contain"
+  />
+  <Image
+    src="/symbolonly.png"
+    alt="StoQ"
+    width={80}
+    height={32}
+    className="h-8 w-auto object-contain"
+  />
+</Link>
         <div className="hidden md:flex items-center gap-5 text-sm font-medium text-slate-600">
           <Link href="/dashboard" className="hover:text-blue-600 transition">News</Link>
           <Link href="/portfolio" className="hover:text-blue-600 transition">Portfolio</Link>
