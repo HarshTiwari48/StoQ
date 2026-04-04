@@ -7,6 +7,7 @@ import CategorySidebar from "@/components/dashboard/CategorySidebar";
 import LiveMarketPanel from "@/components/dashboard/LiveMarketPanel";
 import Navbar from "@/components/dashboard/Navbar";
 import NewsOverlay from "@/components/dashboard/NewsOverlay";
+import Footer from "@/components/dashboard/Footer";
 
 type NewsItem = {
   _id: string;
@@ -157,10 +158,8 @@ const [isOverlayOpen, setIsOverlayOpen] =
         </div>
       </div>
 
-      {/* Summary */}
-      <Card className="mt-6 rounded-xl p-6 shadow-md">
-        AI Summary
-      </Card>
+      {/* Footer */}
+      <Footer />
 
 
       <NewsOverlay
