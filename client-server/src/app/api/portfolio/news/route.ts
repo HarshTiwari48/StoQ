@@ -38,6 +38,7 @@ export async function GET(req: Request) {
         title:            1,
          description:      1,  
         domain:           1,
+        analysis: 1,
         stocks:           1,
         signal:           1,
         confidence_score: 1,
@@ -46,6 +47,7 @@ export async function GET(req: Request) {
         source:           1,
         sourceUrl:        1,
         publishedAt:      1,
+        impacted_domains: 1,
         imageUrl:         1,
       },
     }

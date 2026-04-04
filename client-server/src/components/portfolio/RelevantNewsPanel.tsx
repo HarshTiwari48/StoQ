@@ -1,27 +1,32 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import NewsOverlay from "@/components/dashboard/NewsOverlay";
 
 interface NewsItem {
   _id: string;
   title: string;
   domain: string;
+  description?: string;
   stocks: string[];
   signal: string;
   confidence_score: number;
   publishedAt: string;
   imageUrl?: string;
   source: string;
-  sourceUrl?: string;   // ← add this
+  sourceUrl?: string;
   rsi?: number;
   macd?: number;
+  reasoning?: string;
+  analysis?: any[];
+  impacted_domains?: any[];
 }
 
 export default function RelevantNewsPanel() {
-  const [news, setNews]       = useState<NewsItem[]>([]);
-  const [tickers, setTickers] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [page, setPage]       = useState(1);
+  const [news, setNews]         = useState<NewsItem[]>([]);
+  const [tickers, setTickers]   = useState<string[]>([]);
+  const [loading, setLoading]   = useState(true);
+  const [page, setPage]         = useState(1);
   const [selected, setSelected] = useState<NewsItem | null>(null);
 
   useEffect(() => {
@@ -96,18 +101,22 @@ export default function RelevantNewsPanel() {
                     <span className="news-time">{timeAgo(item.publishedAt)}</span>
                   </div>
                   <p className="news-title">{item.title}</p>
-                  <div className="news-footer">
-                    <span className={`signal-badge ${signalClass(item.signal)}`}>
-                      {item.signal}
-                    </span>
+                  <div className="stock-signals">
+                    {(item.analysis ?? item.impacted_domains)?.flatMap((d: any) =>
+                      d.stocks?.slice(0, 3).map((s: any) => (
+                        <span key={s.ticker} className="stock-signal-pill">
+                          <span className="stock-signal-ticker">{s.ticker}</span>
+                          <span className={`signal-badge ${signalClass(s.signal)}`}>{s.signal}</span>
+                        </span>
+                      ))
+                    ) ?? item.stocks?.slice(0, 3).map((t) => (
+                      <span key={t} className="ticker-pill small">{t}</span>
+                    ))}
+                  </div>
+                  <div className="news-footer-top">
                     <span className="conf-score">
                       {(item.confidence_score * 100).toFixed(0)}% confidence
                     </span>
-                    <div className="news-tickers">
-                      {item.stocks?.slice(0, 3).map((t) => (
-                        <span key={t} className="ticker-pill small">{t}</span>
-                      ))}
-                    </div>
                   </div>
                 </div>
               </li>
@@ -115,80 +124,19 @@ export default function RelevantNewsPanel() {
           </ul>
 
           <div className="pagination">
-            <button
-              className="btn-page"
-              disabled={page === 1}
-              onClick={() => setPage((p) => p - 1)}
-            >← Prev</button>
+            <button className="btn-page" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>← Prev</button>
             <span className="page-num">Page {page}</span>
-            <button
-              className="btn-page"
-              disabled={news.length < 10}
-              onClick={() => setPage((p) => p + 1)}
-            >Next →</button>
+            <button className="btn-page" disabled={news.length < 10} onClick={() => setPage((p) => p + 1)}>Next →</button>
           </div>
         </>
       )}
 
-      {/* Detail modal */}
-      {selected && (
-        <div className="modal-overlay" onClick={() => setSelected(null)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setSelected(null)}>✕</button>
-            {selected.imageUrl && (
-              <img src={selected.imageUrl} alt={selected.title} className="modal-img" />
-            )}
-            <div className="modal-body">
-              <div className="modal-meta">
-                <span className="news-domain">{selected.domain}</span>
-                <span className="news-time">{timeAgo(selected.publishedAt)}</span>
-              </div>
-              <h3 className="modal-title">{selected.title}</h3>
-              <div className="modal-signals">
-                <div className="modal-signal-item">
-                  <span className="signal-label">Signal</span>
-                  <span className={`signal-badge ${signalClass(selected.signal)}`}>
-                    {selected.signal}
-                  </span>
-                </div>
-                <div className="modal-signal-item">
-                  <span className="signal-label">Confidence</span>
-                  <span className="signal-value">
-                    {(selected.confidence_score * 100).toFixed(0)}%
-                  </span>
-                </div>
-                {selected.rsi !== undefined && (
-                  <div className="modal-signal-item">
-                    <span className="signal-label">RSI</span>
-                    <span className="signal-value">{selected.rsi?.toFixed(2)}</span>
-                  </div>
-                )}
-                {selected.macd !== undefined && (
-                  <div className="modal-signal-item">
-                    <span className="signal-label">MACD</span>
-                    <span className="signal-value">{selected.macd?.toFixed(2)}</span>
-                  </div>
-                )}
-              </div>
-              <div className="modal-tickers">
-                {selected.stocks?.map((t) => (
-                  <span key={t} className="ticker-pill">{t}</span>
-                ))}
-              </div>
-              <p className="modal-source">
-                  Source:{" "}
-                  {selected.sourceUrl ? (
-                    <a href={selected.sourceUrl} target="_blank" rel="noopener noreferrer" className="source-link">
-                      {selected.source}
-                    </a>
-                  ) : (
-                    selected.source
-                  )}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* NewsOverlay handles the modal */}
+      <NewsOverlay
+        open={!!selected}
+        onOpenChange={(v) => { if (!v) setSelected(null); }}
+        article={selected}
+      />
     </div>
   );
 }

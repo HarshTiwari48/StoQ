@@ -458,3 +458,8 @@
 
 
 }
+
+.stock-signals       { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.4rem 0; }
+.stock-signal-pill   { display: flex; align-items: center; gap: 0.25rem; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 99px; padding: 2px 6px; }
+.stock-signal-ticker { font-size: 0.68rem; font-weight: 700; color: #374151; }
+.news-footer-top     { display: flex; align-items: center; justify-content: space-between; margin-top: 0.3rem; }
