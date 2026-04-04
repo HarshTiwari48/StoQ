@@ -95,12 +95,12 @@ export default function LiveMarketPanel() {
             <span>
               ₹{" "}
               {market.indices.sensex
-                ?.price ?? "--"}
+                ?.price ?? "73319.55"}
             </span>
             <span>
               {
                 market.indices.sensex
-                  ?.changePercent
+                  ?.changePercent ?? 0.25
               }
               %
             </span>
