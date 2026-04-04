@@ -19,48 +19,115 @@ export async function runNewsPipeline() {
     const mlResult = await sendNewsToML(fetchedNews);
 
     // Step 3: merge fetched data + ML output
-    const mergedNews = fetchedNews.map((article, index: number) => {
-  const analysis = mlResult[index];
+    const mergedNews = fetchedNews.map(
+  (article, index: number) => {
+    const mlArticle = mlResult[index];
 
-  const impactedDomains =
-    analysis?.ai_analysis?.impacted_domains || [];
+    const impactedDomains =
+      mlArticle?.ai_analysis
+        ?.impacted_domains || [];
 
-  const firstDomain = impactedDomains[0] || null;
-  const firstStock = firstDomain?.stocks?.[0] || null;
+    const firstDomain =
+      impactedDomains[0] || null;
 
-  return {
-    article_id: article.article_id,
-    date: article.date,
-    source: article.source,
-    title: article.title,
-    description: article.description,
+    const firstStock =
+      firstDomain?.stocks?.[0] || null;
 
-    sourceUrl: article.source_url,
-    imageUrl: article.image_url,
+    return {
+      article_id: article.article_id,
+      date: article.date,
+      source: article.source,
+      title: article.title,
+      description:
+        article.description,
 
-    author: article.author,
-    publishedAt: article.published_at,
+      sourceUrl:
+        article.source_url,
+      imageUrl:
+        article.image_url,
 
-    // UI-friendly flat fields
-    domain: firstDomain?.domain || "General Market",
-    stocks: impactedDomains.flatMap(
-      (domain: any) =>
-        domain.stocks?.map((stock: any) => stock.ticker) || []
-    ),
+      author: article.author,
+      publishedAt:
+        article.published_at,
 
-    signal: firstStock?.signal || "HOLD",
-    confidence_score:
-      firstStock?.confidence_score || 0,
+      // KEEP FLAT FIELDS FOR EXISTING UI
+      domain:
+        firstDomain?.domain ||
+        "General Market",
 
-    rsi: firstStock?.data?.rsi ?? null,
-    macd: firstStock?.data?.macd ?? null,
-    reasoning: firstStock?.reasoning ?? null,
-    
+      stocks:
+        impactedDomains.flatMap(
+          (domain: any) =>
+            domain.stocks?.map(
+              (stock: any) =>
+                stock.ticker
+            ) || []
+        ),
 
-    // Keep full ML response for detailed modal
-    impacted_domains: impactedDomains,
-  };
-});
+      signal:
+        firstStock?.signal ||
+        "HOLD",
+
+      confidence_score:
+        firstStock
+          ?.confidence_score ||
+        0,
+
+      rsi:
+        firstStock?.data?.rsi ??
+        null,
+
+      macd:
+        firstStock?.data?.macd ??
+        null,
+
+      reasoning:
+        firstStock?.reasoning ??
+        null,
+
+      // 🚀 NEW NESTED STRUCTURE
+      analysis:
+        impactedDomains.map(
+          (domain: any) => ({
+            domain:
+              domain.domain,
+            stocks:
+              domain.stocks?.map(
+                (
+                  stock: any
+                ) => ({
+                  ticker:
+                    stock.ticker,
+                  signal:
+                    stock.signal,
+                  confidence_score:
+                    stock.confidence_score,
+                  reasoning:
+                    stock.reasoning,
+                  data: {
+                    rsi:
+                      stock
+                        ?.data
+                        ?.rsi ??
+                      null,
+                    macd:
+                      stock
+                        ?.data
+                        ?.macd ??
+                      null,
+                    sentiment:
+                      stock
+                        ?.data
+                        ?.sentiment ??
+                      null,
+                  },
+                })
+              ) || [],
+          })
+        ),
+    };
+  }
+);
 
     // Step 4: store in MongoDB
     for (const article of mergedNews) {

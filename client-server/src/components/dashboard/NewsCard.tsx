@@ -47,6 +47,14 @@ export default function NewsCard({
       ? "bg-red-100 text-red-700"
       : "bg-yellow-100 text-yellow-700";
 
+  const primaryStock =
+    stocks?.[0] || "MARKET";
+
+  const remainingStocks =
+    stocks?.length > 1
+      ? stocks.length - 1
+      : 0;
+
   return (
     <Card className="rounded-xl border border-slate-200 shadow-md hover:shadow-lg transition-all duration-300 p-4">
       <div className="flex gap-4">
@@ -71,19 +79,25 @@ export default function NewsCard({
             {showHindi ? translatedTitle : title}
           </h2>
 
-          <p className="text-sm text-slate-500">
-            {sourceUrl ? (
-              <a href={sourceUrl} target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-blue-600">
-                {source}
-              </a>
-            ) : source}
-          </p>
+          <p className="text-sm text-slate-500">{source}</p>
 
-          <div className="flex items-center gap-3 flex-wrap">
-            <Badge className={signalStyle}>{signal}</Badge>
+          <div className="flex items-center gap-3">
+            
+           
+            {/* top stock signal */}
+         <div className="flex items-center gap-3 flex-wrap">
+            <span className="px-2 py-1 text-xs rounded-md bg-blue-50 text-blue-700 font-medium">
+              {primaryStock}
+            </span>
+
+            <Badge className={signalStyle}>
+              {signal}
+            </Badge>
+
             <span className="text-sm font-medium text-slate-600">
               {(confidence * 100).toFixed(0)}%
             </span>
+          </div>
 
             {/* Language toggle */}
             <div className="flex gap-1 ml-auto">
@@ -103,16 +117,16 @@ export default function NewsCard({
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {stocks.map((stock) => (
-              <span
-                key={stock}
-                className="px-2 py-1 text-xs rounded-md bg-blue-50 text-blue-700"
-              >
-                {stock}
-              </span>
-            ))}
-          </div>
+          {/* additional stocks */}
+          {remainingStocks > 0 && (
+            <p className="text-xs text-slate-500">
+              +{remainingStocks} more
+              stock
+              {remainingStocks > 1
+                ? "s"
+                : ""}
+            </p>
+          )}
         </div>
       </div>
     </Card>

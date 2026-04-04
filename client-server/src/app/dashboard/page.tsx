@@ -6,6 +6,7 @@ import NewsCard from "@/components/dashboard/NewsCard";
 import CategorySidebar from "@/components/dashboard/CategorySidebar";
 import LiveMarketPanel from "@/components/dashboard/LiveMarketPanel";
 import Navbar from "@/components/dashboard/Navbar";
+import NewsOverlay from "@/components/dashboard/NewsOverlay";
 
 type NewsItem = {
   _id: string;
@@ -24,6 +25,11 @@ export default function DashboardPage() {
     useState("ALL");
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [selectedArticle, setSelectedArticle] =
+  useState<any>(null);
+
+const [isOverlayOpen, setIsOverlayOpen] =
+  useState(false);
 
   useEffect(() => {
   setPage(1);
@@ -114,18 +120,24 @@ export default function DashboardPage() {
             <p>Loading news...</p>
           ) : news.length > 0 ? (
             news.map((article) => (
-              <NewsCard
-                key={article._id}
-                title={article.title}
-                source={article.source}
-                signal={article.signal}
-                confidence={
-                  article.confidence_score
-                }
-                stocks={article.stocks}
-                imageUrl={article.imageUrl}
-              />
-            ))
+  <div
+    key={article._id}
+    onClick={() => {
+      setSelectedArticle(article);
+      setIsOverlayOpen(true);
+    }}
+    className="cursor-pointer"
+  >
+    <NewsCard
+      title={article.title}
+      source={article.source}
+      signal={article.signal}
+      confidence={article.confidence_score}
+      stocks={article.stocks}
+      imageUrl={article.imageUrl}
+    />
+  </div>
+))
           ) : (
             <p className="text-slate-500">
               No news found
@@ -149,6 +161,13 @@ export default function DashboardPage() {
       <Card className="mt-6 rounded-xl p-6 shadow-md">
         AI Summary
       </Card>
+
+
+      <NewsOverlay
+  open={isOverlayOpen}
+  onOpenChange={setIsOverlayOpen}
+  article={selectedArticle}
+/>
     </main>
   );
 }

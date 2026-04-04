@@ -1,5 +1,62 @@
 import mongoose, { Schema, model, models } from "mongoose";
 
+const StockAnalysisSchema = new Schema(
+  {
+    ticker: {
+      type: String,
+      required: true,
+      uppercase: true,
+      trim: true,
+    },
+    signal: {
+      type: String,
+      required: true,
+      enum: ["BUY", "SELL", "HOLD", "STRONG BUY", "STRONG SELL"],
+    },
+    confidence_score: {
+      type: Number,
+      required: true,
+      min: 0,
+      max: 1,
+    },
+    reasoning: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    data: {
+      rsi: {
+        type: Number,
+        default: null,
+      },
+      macd: {
+        type: Number,
+        default: null,
+      },
+      sentiment: {
+        type: Number,
+        default: null,
+      },
+    },
+  },
+  { _id: false }
+);
+
+const DomainAnalysisSchema = new Schema(
+  {
+    domain: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    stocks: {
+      type: [StockAnalysisSchema],
+      default: [],
+    },
+  },
+  { _id: false }
+);
+
 const NewsSchema = new Schema(
   {
     title: {
@@ -9,54 +66,60 @@ const NewsSchema = new Schema(
       unique: true,
     },
 
-    stocks: [{
-      type: String,
-      required: true,
-      uppercase: true,
-      trim: true,
-    }],
+    // KEEP OLD FIELDS FOR CURRENT UI
+    stocks: [
+      {
+        type: String,
+        uppercase: true,
+        trim: true,
+      },
+    ],
 
     domain: {
       type: String,
-      required: true,
       trim: true,
+      default: null,
     },
 
     description: {
       type: String,
       required: true,
       trim: true,
-      
     },
 
     signal: {
       type: String,
-      required: true,
-      enum: ["BUY", "SELL", "HOLD"],
+      enum: ["BUY", "SELL", "HOLD", "STRONG BUY", "STRONG SELL"],
+      default: null,
     },
 
     confidence_score: {
       type: Number,
-      required: true,
       min: 0,
       max: 1,
+      default: null,
     },
 
     rsi: {
       type: Number,
-      required: false,
       default: null,
     },
 
     macd: {
       type: Number,
-      required: false,
       default: null,
     },
+
     reasoning: {
       type: String,
-      required: false,
       trim: true,
+      default: null,
+    },
+
+    // NEW NESTED ML STRUCTURE
+    analysis: {
+      type: [DomainAnalysisSchema],
+      default: [],
     },
 
     source: {
@@ -68,20 +131,22 @@ const NewsSchema = new Schema(
       type: Date,
       required: false,
     },
+
     sourceUrl: {
-    type: String,
-    required: false,
+      type: String,
+      required: false,
     },
 
     imageUrl: {
-    type: String,
-    required: false,
+      type: String,
+      required: false,
     },
+
     expiresAt: {
-    type: Date,
-    default: () =>
-    new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    index: { expires: 0 },
+      type: Date,
+      default: () =>
+        new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      index: { expires: 0 },
     },
   },
   {
