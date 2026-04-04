@@ -36,6 +36,7 @@ export async function GET(req: Request) {
     {
       projection: {
         title:            1,
+         description:      1,  
         domain:           1,
         stocks:           1,
         signal:           1,
