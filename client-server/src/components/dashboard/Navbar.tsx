@@ -34,7 +34,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-5 text-sm font-medium text-slate-600">
           <Link href="/dashboard" className="hover:text-blue-600 transition">News</Link>
           <Link href="/portfolio" className="hover:text-blue-600 transition">Portfolio</Link>
-          <Link href="/insights" className="hover:text-blue-600 transition">Insights</Link>
+          <Link href="/demo" className="hover:text-blue-600 transition">Analyze News</Link>
         </div>
       </div>
 

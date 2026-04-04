@@ -472,3 +472,68 @@
   margin-bottom: 0.75rem;
 }
 .back-btn:hover { text-decoration: underline; }
+
+/* ── Demo Page ─────────────────────────────────────── */
+.demo-page        { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; min-height: 100vh; }
+.demo-header      { margin-bottom: 2rem; }
+.demo-label       { font-size: 0.7rem; letter-spacing: 0.15em; color: #6366f1; font-weight: 600; text-transform: uppercase; }
+.demo-title       { font-size: 2rem; font-weight: 700; margin: 0.25rem 0; }
+.demo-subtitle    { color: #6b7280; font-size: 0.95rem; }
+
+.demo-input-card  { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+.demo-input-group { margin-bottom: 1rem; }
+.demo-input-label { font-size: 0.8rem; font-weight: 600; color: #374151; display: block; margin-bottom: 0.4rem; }
+.demo-textarea    { width: 100%; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; resize: vertical; outline: none; background: #fafafa; font-family: inherit; transition: border-color 0.15s; box-sizing: border-box; }
+.demo-textarea:focus { border-color: #6366f1; background: #fff; }
+
+.demo-analyze-btn { width: 100%; padding: 0.85rem; background: #6366f1; color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+.demo-analyze-btn:hover:not(:disabled) { background: #4f46e5; }
+.demo-analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.demo-btn-loading { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.demo-spinner     { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+.demo-error       { color: #ef4444; font-size: 0.85rem; margin-top: 0.75rem; }
+
+/* Summary bar */
+.demo-summary-bar   { display: flex; gap: 1rem; flex-wrap: wrap; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
+.demo-summary-item  { display: flex; flex-direction: column; gap: 0.2rem; }
+.demo-summary-label { font-size: 0.7rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; }
+.demo-summary-value { font-size: 1.1rem; font-weight: 700; color: #111827; }
+.demo-summary-signal{ font-size: 0.85rem; font-weight: 700; padding: 3px 12px; border-radius: 99px; }
+
+/* Domain card */
+.demo-domain-card   { margin-bottom: 1.5rem; }
+.demo-domain-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+.demo-domain-name   { font-size: 0.95rem; font-weight: 700; color: #374151; }
+.demo-domain-count  { font-size: 0.75rem; color: #9ca3af; background: #f3f4f6; padding: 2px 10px; border-radius: 99px; }
+
+/* Stocks grid */
+.demo-stocks-grid  { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.demo-stock-card   { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.demo-stock-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+.demo-stock-ticker { font-size: 1.1rem; font-weight: 700; }
+.demo-stock-domain { font-size: 0.7rem; color: #9ca3af; }
+.demo-stock-badges { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
+.demo-signal-badge { font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+.demo-conf-badge   { font-size: 0.72rem; background: #f3f4f6; color: #374151; padding: 2px 8px; border-radius: 99px; }
+
+/* Metrics */
+.demo-metrics-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-bottom: 0.6rem; }
+.demo-metric       { border: 1px solid #f0f0f0; border-radius: 8px; padding: 0.4rem 0.6rem; }
+.demo-metric-label { font-size: 0.68rem; color: #9ca3af; display: block; }
+.demo-metric-value { font-size: 0.88rem; font-weight: 600; }
+
+/* Confidence bar */
+.demo-conf-bar-wrap { height: 4px; background: #f0f0f0; border-radius: 99px; margin-bottom: 0.75rem; overflow: hidden; }
+.demo-conf-bar-fill { height: 100%; border-radius: 99px; transition: width 0.6s ease; }
+
+/* Reasoning */
+.demo-reasoning      { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.6rem 0.75rem; }
+.demo-reasoning-label{ font-size: 0.68rem; color: #6b7280; font-weight: 600; margin-bottom: 0.25rem; }
+.demo-reasoning-text { font-size: 0.8rem; color: #374151; line-height: 1.6; }
+
+.demo-empty { text-align: center; padding: 2rem; color: #9ca3af; font-size: 0.9rem; line-height: 1.8; }
+
+/* Results section */
+.demo-results { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
