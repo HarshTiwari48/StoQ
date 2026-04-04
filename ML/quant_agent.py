@@ -1,10 +1,14 @@
 import pandas as pd
 import xgboost as xgb
+import yfinance as yf
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
-from openai_agent import isolate_context # We will build this next
+from datetime import datetime, timedelta
+import random
+import time
+import requests
+from openai_agent import isolate_context
 from schemas import ProcessedStock, StockMetrics
 from ticker_data import TICKER_DATA
-
 print("--- [SYSTEM] Loading Quant Models ---")
 ml_model = xgb.XGBClassifier()
 ml_model.load_model('model_output.json')
@@ -12,17 +16,18 @@ ml_model.load_model('model_output.json')
 tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
 fb_model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
 nlp = pipeline("sentiment-analysis", model=fb_model, tokenizer=tokenizer)
+print("--- [SYSTEM] Ready ---")
 
 def get_live_technicals(ticker: str):
     """
     Fetches RSI and MACD from the local TICKER_DATA cache.
     Bypasses the Yahoo Finance block on Hugging Face.
     """
-    # remove .NS attached
+    # Clean the ticker just in case it has a .NS attached
     clean_ticker = ticker.replace(".NS", "")
     
     if clean_ticker in TICKER_DATA:
-        # Extract the values from tuple (Price, Change, RSI, MACD) in ticker_data
+        # Extract the values from your tuple: (Price, Change, RSI, MACD)
         ticker_info = TICKER_DATA[clean_ticker]
         rsi = ticker_info[2]
         macd_line = ticker_info[3]
@@ -30,8 +35,10 @@ def get_live_technicals(ticker: str):
         return round(float(rsi), 2), round(float(macd_line), 4)
     else:
         print(f"[WARN] {clean_ticker} not found in local TICKER_DATA cache.")
-        # Returns  so your fallback logic in quant_agent triggers perfectly
+        # Returns None, None so your fallback logic in quant_agent triggers perfectly
         return 51.5, 0.01
+
+    
 
 def quant_agent(ticker: str, news_text: str, ai_weight: float = 1.0) -> ProcessedStock:
     """Uses Weighted Dynamic Blending with Normalized Technicals."""
@@ -55,20 +62,21 @@ def quant_agent(ticker: str, news_text: str, ai_weight: float = 1.0) -> Processe
             data=StockMetrics(rsi=50.0, macd=0.0, sentiment=sentiment)
         )
 
-   # ML Predictions
+    # 3. 🎯 Normalized ML Scoring
     input_df = pd.DataFrame([[rsi, macd, sentiment]], columns=['rsi', 'macd_line', 'sentiment_score'])
     raw_prob_buy = float(ml_model.predict_proba(input_df)[0][1])
     
     base_tech = (raw_prob_buy * 2) - 1
+    # tech_score = (base_tech * 0.8) + ((rsi - 50) / 1000) 
     tech_score = base_tech
     tech_score = max(-1.0, min(1.0, tech_score))
 
     # 4. 🚀 70/30 Conviction Ratio
     abs_sent = abs(sentiment)
     
-    if abs_sent >= 0.85:
+    if abs_sent >= 0.80:
         news_wt, tech_wt = 0.70, 0.30 
-        state = "Major news is overpowering the charts right now"
+        state = "High-conviction news dominating"
     elif abs_sent >= 0.50:
         news_wt, tech_wt = 0.55, 0.45 
         state = "News-led market blend"

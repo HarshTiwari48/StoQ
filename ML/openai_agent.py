@@ -103,7 +103,7 @@ def isolate_context(ticker: str, news_text: str) -> str:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
-            temperature=0.0  
+            temperature=0.0 
         )
         return response.choices[0].message.content.strip()
     except:
