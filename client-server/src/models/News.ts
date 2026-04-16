@@ -141,13 +141,6 @@ const NewsSchema = new Schema(
       type: String,
       required: false,
     },
-
-    expiresAt: {
-      type: Date,
-      default: () =>
-        new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-      index: { expires: 0 },
-    },
   },
   {
     timestamps: true,
